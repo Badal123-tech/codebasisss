@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Celebrity Image Classifier</title>
+</head>
+
+<body>
+    <h2>Upload Image for Celebrity Classification</h2>
+
+    <form action="/classify_image" method="post" enctype="multipart/form-data">
+        <input type="file" name="image_file" required />
+        <br><br>
+        <input type="submit" value="Classify" />
+    </form>
+
+    <br>
+    <h3>Result:</h3>
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% elif result %}
+    <ul>
+        {% for r in result %}
+        <li><b>{{ r.class }}</b> with probability: {{ r.class_probability }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+
+</html>
