@@ -2,29 +2,179 @@
 <html>
 
 <head>
-    <title>Celebrity Image Classifier</title>
+    <title>Sports Person Classifier</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .classifier-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .player-card {
+            text-align: center;
+        }
+
+        .player-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            margin-bottom: 5px;
+        }
+
+        .player-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .results-section {
+            margin: 20px 0;
+        }
+
+        .results-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .result-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .final-result {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .upload-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .result-list {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
-    <h2>Upload Image for Celebrity Classification</h2>
+    <div class="classifier-container">
+        <h1>Sports Person Classifier</h1>
 
-    <form action="/classify_image" method="post" enctype="multipart/form-data">
-        <input type="file" name="image_file" required />
-        <br><br>
-        <input type="submit" value="Classify" />
-    </form>
+        <div class="player-grid">
+            <div class="player-card">
+                <img src="/static/images/messi.jpg" alt="Lionel Messi" class="player-img">
+                <div class="player-name">LIONEL MESSI</div>
+            </div>
+            <div class="player-card">
+                <img src="/static/images/sharapova.jpg" alt="Maria Sharapova" class="player-img">
+                <div class="player-name">MARIA SHARAPOVA</div>
+            </div>
+            <div class="player-card">
+                <img src="/static/images/federer.jpg" alt="Roger Federer" class="player-img">
+                <div class="player-name">ROGER FEDERER</div>
+            </div>
+            <div class="player-card">
+                <img src="/static/images/williams.jpg" alt="Serena Williams" class="player-img">
+                <div class="player-name">SERENA WILLIAMS</div>
+            </div>
+            <div class="player-card">
+                <img src="/static/images/kohli.jpg" alt="Virat Kohli" class="player-img">
+                <div class="player-name">VIRAT KOHLI</div>
+            </div>
+        </div>
 
-    <br>
-    <h3>Result:</h3>
-    {% if error %}
-    <p style="color:red;">{{ error }}</p>
-    {% elif result %}
-    <ul>
-        {% for r in result %}
-        <li><b>{{ r.class }}</b> with probability: {{ r.class_probability }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+        <div class="upload-section">
+            <h2>Upload Image for Classification</h2>
+            <form action="/classify_image" method="post" enctype="multipart/form-data">
+                <input type="file" name="image_file" accept="image/*" required>
+                <br><br>
+                <button type="submit" class="upload-btn">Classify Image</button>
+            </form>
+        </div>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% elif result %}
+        <div class="results-section">
+            <div class="results-header">
+                <div>Player</div>
+                <div>Probability Score</div>
+            </div>
+            {% for r in result %}
+            <div class="result-row">
+                <div>{{ r.class }}</div>
+                <div>{{ r.class_probability }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="final-result">
+            <strong>Class {{ result[0].class_id }}</strong><br>
+            <h2>{{ result[0].class|upper }}</h2>
+        </div>
+        {% endif %}
+
+        <div class="progress-bar">
+            <span>00:00 / 00:00</span>
+            <span>Class Dictionary ></span>
+        </div>
+    </div>
 </body>
 
 </html>
